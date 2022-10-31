@@ -4,20 +4,20 @@ Content-Type: application/json
 {"accountHolder":  "Laz", "accountType":  "SAVINGS", "openingBalance":  5000}
 
 ###
-PUT localhost:5000/api/v1/depositFunds/d82bd1e1-0e54-4731-b1e4-802baf3a5d70
+PUT localhost:5000/api/v1/depositFunds/{id}
 Content-Type: application/json
 
 {"amount": 3000}
 
 ###
 
-PUT localhost:5000/api/v1/withdrawFunds/d82bd1e1-0e54-4731-b1e4-802baf3a5d70
+PUT localhost:5000/api/v1/withdrawFunds/{id}
 Content-Type: application/json
 
 {"amount": 4000}
 
 ###
-DELETE localhost:5000/api/v1/closeAccount/d82bd1e1-0e54-4731-b1e4-802baf3a5d70
+DELETE localhost:5000/api/v1/closeAccount/{id}
 
 ###
 POST  localhost:5000/api/v1/restoreReadDb
@@ -27,7 +27,7 @@ POST  localhost:5000/api/v1/restoreReadDb
 GET localhost:5001/api/v1/bankAccountLookup/
 
 ###
-GET localhost:5001/api/v1/bankAccountLookup/byHolder/Cheikh
+GET localhost:5001/api/v1/bankAccountLookup/byHolder/{accountHolder}
 
 ###
-GET localhost:5001/api/v1/bankAccountLookup/withBalance/GREATER_THAN/1000
+GET localhost:5001/api/v1/bankAccountLookup/withBalance/{equalityType}/{amount}
