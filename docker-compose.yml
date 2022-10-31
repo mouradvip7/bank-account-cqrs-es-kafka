@@ -1,0 +1,81 @@
+version: "3.9"
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: mourad
+      POSTGRES_PASSWORD: mourad
+      PGDATA: /data/postgres
+    volumes:
+      - postgres_data:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      bank:
+
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+    networks:
+      bank:
+
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ZOO_TICK_TIME=8000
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      bank:
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+        - zookeeper
+    networks:
+      bank:
+
+
+volumes:
+  zookeeper_data:
+    name: zookeeper_data
+    driver: local
+  kafka_data:
+    name: kafka_data
+    driver: local
+  postgres_data:
+    name: postgres_data
+    driver: local
+  mongo_data:
+    name: mongo_data
+    driver: local
+
+networks:
+  bank:
+    name: bank
+    driver: bridge
